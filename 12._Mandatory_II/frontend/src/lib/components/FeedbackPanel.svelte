@@ -1,6 +1,5 @@
 <script>
-  export let statusMessage = '';
-  export let errorMessage = '';
+  let { statusMessage = '', errorMessage = '' } = $props();
 </script>
 
 {#if statusMessage || errorMessage}

@@ -8,16 +8,13 @@ import { recordLoginEvent } from '../database/login/login.js';
 const router = Router();
 
 router.post('/api/auth/register', async (req, res) => {
-    console.log("register");
     const { email, password } = req.body;
     if (!email || !password) {
         return res.status(400).send({ error: 'Email and password are required' });
     }
 
     try {
-        console.log("getting user");
         const existingUser = await getUserByEmail(email);
-        console.log(existingUser);
         if (existingUser) {
             return res.status(409).send({ error: 'User already exists' });
         }
@@ -36,7 +33,6 @@ router.post('/api/auth/register', async (req, res) => {
 });
 
 router.post('/api/auth/login', async (req, res) => {
-    console.log("login");
     const { email, password } = req.body;
     if (!email || !password) {
         return res.status(400).send({ error: 'Email and password are required' });
@@ -64,7 +60,6 @@ router.post('/api/auth/login', async (req, res) => {
 });
 
 router.post('/api/auth/logout', (req, res) => {
-    console.log("logout");
     req.session.destroy(() => {
         res.clearCookie('connect.sid');
         res.send({ message: 'Logged out' });
@@ -72,7 +67,6 @@ router.post('/api/auth/logout', (req, res) => {
 });
 
 router.get('/api/auth/session', authGuard, async (req, res) => {
-    console.log("session");
     try {
         const user = await getUserById(req.session.userId);
         res.send({ user });

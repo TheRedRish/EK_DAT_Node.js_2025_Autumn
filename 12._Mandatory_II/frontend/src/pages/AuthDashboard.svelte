@@ -143,7 +143,7 @@
       bind:password={registerPassword}
       submitLabel="Register &amp; login"
       {loading}
-      on:submit={handleRegister}
+      bind:onsubmit={handleRegister}
     />
 
     <AuthForm
@@ -153,7 +153,7 @@
       bind:password={loginPassword}
       submitLabel="Sign in"
       {loading}
-      on:submit={handleLogin}
+      bind:onsubmit={handleLogin}
     />
   </div>
 

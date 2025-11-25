@@ -1,18 +1,18 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
+  let {
+    title,
+    description,
+    email = $bindable(''),
+    password = $bindable(''),
+    submitLabel = 'Submit',
+    loading = false,
+    onsubmit = $bindable(() => {})
+  } = $props();
 
-  export let title;
-  export let description;
-  export let email = '';
-  export let password = '';
-  export let submitLabel = 'Submit';
-  export let loading = false;
-
-  const dispatch = createEventDispatcher();
 
   function handleSubmit(event) {
     event.preventDefault();
-    dispatch('submit', { email, password });
+    onsubmit({ email, password });
   }
 </script>
 
@@ -24,7 +24,7 @@
     </div>
   </div>
 
-  <form class="grid" on:submit={handleSubmit}>
+  <form class="grid" onsubmit={handleSubmit}>
     <label>
       <span>Email</span>
       <input

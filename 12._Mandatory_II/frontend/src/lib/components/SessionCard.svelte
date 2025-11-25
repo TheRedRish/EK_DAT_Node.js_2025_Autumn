@@ -1,8 +1,5 @@
 <script>
-  export let user = null;
-  export let loading = false;
-  export let onCheckSession;
-  export let onLogout;
+  let { user = null, loading = false, onCheckSession, onLogout } = $props();
 </script>
 
 <section class="card status">
@@ -12,8 +9,8 @@
       <p>GET /api/auth/session</p>
     </div>
     <div class="actions">
-      <button on:click={onCheckSession} disabled={loading}>Check session</button>
-      <button on:click={onLogout} disabled={loading || !user}>Logout</button>
+      <button onclick={onCheckSession} disabled={loading}>Check session</button>
+      <button onclick={onLogout} disabled={loading || !user}>Logout</button>
     </div>
   </div>
 

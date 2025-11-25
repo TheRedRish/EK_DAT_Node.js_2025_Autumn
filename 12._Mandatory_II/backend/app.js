@@ -28,13 +28,11 @@ import authRouter from './routers/authRouter.js';
 app.use(authRouter);
 
 app.get('/api/secure/message', authGuard, async (req, res) => {
-  console.log("secure message");
   const user = await getUserById(req.session.userId);
   res.send({ message: `Welcome back, ${user.email}!`, user });
 });
 
 app.get('/api/auth/events', authGuard, async (req, res) => {
-  console.log("events");
   try {
     const rows = await db.all(
       'SELECT type, created_at FROM login_events WHERE user_id = ? ORDER BY created_at DESC LIMIT 10',

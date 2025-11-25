@@ -1,8 +1,5 @@
 <script>
-  export let message = '';
-  export let loading = false;
-  export let disabled = false;
-  export let onLoad;
+  let { message = '', loading = false, disabled = false, onLoad } = $props();
 </script>
 
 <section class="card">
@@ -12,7 +9,7 @@
       <p>GET /api/secure/message</p>
     </div>
     <div class="actions">
-      <button on:click={onLoad} disabled={loading || disabled}>Load message</button>
+      <button onclick={onLoad} disabled={loading || disabled}>Load message</button>
     </div>
   </div>
   {#if message}

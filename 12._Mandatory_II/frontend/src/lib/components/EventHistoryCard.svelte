@@ -1,8 +1,5 @@
 <script>
-  export let events = [];
-  export let loading = false;
-  export let disabled = false;
-  export let onRefresh;
+  let { events = [], loading = false, disabled = false, onRefresh } = $props();
 </script>
 
 <section class="card">
@@ -12,7 +9,7 @@
       <p>GET /api/auth/events</p>
     </div>
     <div class="actions">
-      <button on:click={onRefresh} disabled={loading || disabled}>Refresh</button>
+      <button onclick={onRefresh} disabled={loading || disabled}>Refresh</button>
     </div>
   </div>
   {#if events.length}
