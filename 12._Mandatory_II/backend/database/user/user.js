@@ -1,7 +1,7 @@
 import db from '../connection.js';
 
 export function getUserByEmail(email) {
-    return db.all('SELECT * FROM users WHERE email = ?', [email]);
+    return db.get('SELECT * FROM users WHERE email = ?', [email]);
 }
 
 export function getUserById(id) {

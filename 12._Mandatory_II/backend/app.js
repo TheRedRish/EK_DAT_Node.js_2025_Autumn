@@ -3,6 +3,7 @@ import session from 'express-session';
 import cors from 'cors';
 import db from './database/connection.js';
 import { authGuard } from './util/authGuard.js';
+import { getUserById } from './database/user/user.js';
 
 const app = express();
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
@@ -27,28 +28,26 @@ import authRouter from './routers/authRouter.js';
 app.use(authRouter);
 
 app.get('/api/secure/message', authGuard, async (req, res) => {
+  console.log("secure message");
   const user = await getUserById(req.session.userId);
-  res.json({ message: `Welcome back, ${user.email}!`, user });
+  res.send({ message: `Welcome back, ${user.email}!`, user });
 });
 
-app.get('/api/auth/events', authGuard, (req, res) => {
-  db.all(
-    'SELECT type, created_at FROM login_events WHERE user_id = ? ORDER BY created_at DESC LIMIT 10',
-    [req.session.userId],
-    (err, rows) => {
-      if (err) {
-        console.error('Failed to load events', err);
-        return res.status(500).json({ error: 'Could not fetch events' });
-      }
-      res.json({ events: rows });
-    }
-  );
+app.get('/api/auth/events', authGuard, async (req, res) => {
+  console.log("events");
+  try {
+    const rows = await db.all(
+      'SELECT type, created_at FROM login_events WHERE user_id = ? ORDER BY created_at DESC LIMIT 10',
+      [req.session.userId]);
+    res.send({ events: rows });
+  } catch (error) {
+    console.error('Failed to load events', err);
+    return res.status(500).send({ error: 'Could not fetch events' });
+  }
 });
-
-
 
 app.use((req, res) => {
-  res.status(404).json({ error: 'Not found' });
+  res.status(404).send({ error: 'Not found' });
 });
 
 
