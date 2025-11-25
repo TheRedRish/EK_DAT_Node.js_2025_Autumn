@@ -1,1 +1,5 @@
-<h1>Hello there handsome</h1>
+<script>
+  import AuthDashboard from './pages/AuthDashboard.svelte';
+</script>
+
+<AuthDashboard />
