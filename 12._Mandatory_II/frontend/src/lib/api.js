@@ -31,6 +31,13 @@ export function loginUser(email, password) {
   });
 }
 
+export function requestPasswordReset(email) {
+  return fetchJson('/api/auth/forgot', {
+    method: 'POST',
+    body: JSON.stringify({ email })
+  });
+}
+
 export function logoutUser() {
   return fetchJson('/api/auth/logout', { method: 'POST' });
 }

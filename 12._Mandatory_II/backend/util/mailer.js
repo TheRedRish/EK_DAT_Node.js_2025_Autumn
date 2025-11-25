@@ -3,3 +3,9 @@ export function sendWelcomeEmail(recipientEmail) {
   console.log(message);
   return message;
 }
+
+export function sendPasswordResetEmail(recipientEmail, newPassword) {
+  const message = `Simulated email to ${recipientEmail}: Your password has been reset. New password: ${newPassword}`;
+  console.log(message);
+  return message;
+}
