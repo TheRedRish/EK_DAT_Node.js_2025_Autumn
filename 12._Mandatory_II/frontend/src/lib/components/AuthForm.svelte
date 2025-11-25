@@ -4,11 +4,11 @@
     description,
     email = $bindable(''),
     password = $bindable(''),
+    includePassword = true,
     submitLabel = 'Submit',
     loading = false,
     onsubmit = $bindable(() => {})
   } = $props();
-
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -34,15 +34,17 @@
         required
       />
     </label>
-    <label>
-      <span>Password</span>
-      <input
-        type="password"
-        bind:value={password}
-        placeholder="••••••••"
-        required
-      />
-    </label>
+    {#if includePassword}
+      <label>
+        <span>Password</span>
+        <input
+          type="password"
+          bind:value={password}
+          placeholder="••••••••"
+          required
+        />
+      </label>
+    {/if}
     <button type="submit" class="primary" disabled={loading}>{submitLabel}</button>
   </form>
 </section>

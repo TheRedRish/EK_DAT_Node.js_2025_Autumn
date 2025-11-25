@@ -6,7 +6,8 @@
     logoutUser,
     fetchSession,
     fetchSecureMessage,
-    fetchEvents
+    fetchEvents,
+    requestPasswordReset
   } from '../lib/api';
   import toast from 'svelte-french-toast';
   import AuthForm from '../lib/components/AuthForm.svelte';
@@ -19,6 +20,7 @@
   let registerPassword = '';
   let loginEmail = '';
   let loginPassword = '';
+  let forgotEmail = '';
   let user = null;
   let secureMessage = '';
   let events = [];
@@ -58,6 +60,24 @@
       loginEmail = '';
       loginPassword = '';
       await Promise.all([loadSecureMessage(), loadEvents()]);
+    } catch (error) {
+      toast.dismiss(toastId);
+      toast.error(error.message);
+    } finally {
+      loading = false;
+    }
+  }
+
+  async function handlePasswordReset(event) {
+    const { email } = event.detail;
+    loading = true;
+    const toastId = toast.loading('Requesting password reset...');
+
+    try {
+      await requestPasswordReset(email);
+      toast.dismiss(toastId);
+      toast.success('Password reset email sent. Check the server logs.');
+      forgotEmail = '';
     } catch (error) {
       toast.dismiss(toastId);
       toast.error(error.message);
@@ -154,6 +174,16 @@
       submitLabel="Sign in"
       {loading}
       bind:onsubmit={handleLogin}
+    />
+
+    <AuthForm
+      title="Forgot password"
+      description="POST /api/auth/forgot"
+      bind:email={forgotEmail}
+      includePassword={false}
+      submitLabel="Send reset email"
+      {loading}
+      bind:onsubmit={handlePasswordReset}
     />
   </div>
 
