@@ -8,11 +8,11 @@
     fetchSecureMessage,
     fetchEvents
   } from '../lib/api';
+  import toast from 'svelte-french-toast';
   import AuthForm from '../lib/components/AuthForm.svelte';
   import SessionCard from '../lib/components/SessionCard.svelte';
   import SecureMessageCard from '../lib/components/SecureMessageCard.svelte';
   import EventHistoryCard from '../lib/components/EventHistoryCard.svelte';
-  import FeedbackPanel from '../lib/components/FeedbackPanel.svelte';
   import PageHeader from '../lib/components/PageHeader.svelte';
 
   let registerEmail = '';
@@ -20,8 +20,6 @@
   let loginEmail = '';
   let loginPassword = '';
   let user = null;
-  let statusMessage = '';
-  let errorMessage = '';
   let secureMessage = '';
   let events = [];
   let loading = false;
@@ -29,19 +27,19 @@
   async function handleRegister(event) {
     const { email, password } = event.detail;
     loading = true;
-    statusMessage = 'Registering user...';
-    errorMessage = '';
+    const toastId = toast.loading('Registering user...');
 
     try {
       const { user: newUser } = await registerUser(email, password);
       user = newUser;
-      statusMessage = 'Registration successful. You are now logged in.';
+      toast.dismiss(toastId);
+      toast.success('Registration successful. You are now logged in.');
       registerEmail = '';
       registerPassword = '';
       await Promise.all([loadSecureMessage(), loadEvents()]);
     } catch (error) {
-      statusMessage = '';
-      errorMessage = error.message;
+      toast.dismiss(toastId);
+      toast.error(error.message);
     } finally {
       loading = false;
     }
@@ -50,19 +48,19 @@
   async function handleLogin(event) {
     const { email, password } = event.detail;
     loading = true;
-    statusMessage = 'Logging in...';
-    errorMessage = '';
+    const toastId = toast.loading('Logging in...');
 
     try {
       const { user: loggedInUser } = await loginUser(email, password);
       user = loggedInUser;
-      statusMessage = 'Login successful.';
+      toast.dismiss(toastId);
+      toast.success('Login successful.');
       loginEmail = '';
       loginPassword = '';
       await Promise.all([loadSecureMessage(), loadEvents()]);
     } catch (error) {
-      statusMessage = '';
-      errorMessage = error.message;
+      toast.dismiss(toastId);
+      toast.error(error.message);
     } finally {
       loading = false;
     }
@@ -70,18 +68,18 @@
 
   async function handleLogout() {
     loading = true;
-    statusMessage = 'Logging out...';
-    errorMessage = '';
+    const toastId = toast.loading('Logging out...');
 
     try {
       await logoutUser();
       user = null;
       secureMessage = '';
       events = [];
-      statusMessage = 'Logged out successfully.';
+      toast.dismiss(toastId);
+      toast.success('Logged out successfully.');
     } catch (error) {
-      statusMessage = '';
-      errorMessage = error.message;
+      toast.dismiss(toastId);
+      toast.error(error.message);
     } finally {
       loading = false;
     }
@@ -91,7 +89,7 @@
     try {
       const { user: sessionUser } = await fetchSession();
       user = sessionUser;
-      statusMessage = 'Session found. You are signed in.';
+      toast.success('Session found. You are signed in.');
       await Promise.all([loadSecureMessage(), loadEvents()]);
     } catch (error) {
       if (error.message === 'Not authenticated') {
@@ -99,7 +97,7 @@
         secureMessage = '';
         events = [];
       } else {
-        errorMessage = error.message;
+        toast.error(error.message);
       }
     }
   }
@@ -111,7 +109,7 @@
       secureMessage = message;
     } catch (error) {
       secureMessage = '';
-      errorMessage = error.message;
+      toast.error(error.message);
     }
   }
 
@@ -125,7 +123,7 @@
       events = eventList;
     } catch (error) {
       events = [];
-      errorMessage = error.message;
+      toast.error(error.message);
     }
   }
 
@@ -179,6 +177,4 @@
     disabled={!user}
     onRefresh={loadEvents}
   />
-
-  <FeedbackPanel {statusMessage} {errorMessage} />
 </main>
