@@ -1,0 +1,7 @@
+{
+  "name": "svelte-french-toast",
+  "version": "0.0.0-local",
+  "main": "index.js",
+  "svelte": "Toaster.svelte",
+  "type": "module"
+}
