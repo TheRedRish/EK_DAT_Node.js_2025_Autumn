@@ -26,8 +26,7 @@
   let events = [];
   let loading = false;
 
-  async function handleRegister(event) {
-    const { email, password } = event.detail;
+  async function handleRegister({ email, password }) {
     loading = true;
     const toastId = toast.loading('Registering user...');
 
@@ -47,8 +46,7 @@
     }
   }
 
-  async function handleLogin(event) {
-    const { email, password } = event.detail;
+  async function handleLogin({ email, password }) {
     loading = true;
     const toastId = toast.loading('Logging in...');
 
@@ -68,8 +66,7 @@
     }
   }
 
-  async function handlePasswordReset(event) {
-    const { email } = event.detail;
+  async function handlePasswordReset({ email }) {
     loading = true;
     const toastId = toast.loading('Requesting password reset...');
 
@@ -163,7 +160,7 @@
       bind:password={registerPassword}
       submitLabel="Register &amp; login"
       {loading}
-      bind:onsubmit={handleRegister}
+      onsubmit={handleRegister}
     />
 
     <AuthForm
@@ -173,7 +170,7 @@
       bind:password={loginPassword}
       submitLabel="Sign in"
       {loading}
-      bind:onsubmit={handleLogin}
+      onsubmit={handleLogin}
     />
 
     <AuthForm
@@ -183,7 +180,7 @@
       includePassword={false}
       submitLabel="Send reset email"
       {loading}
-      bind:onsubmit={handlePasswordReset}
+      onsubmit={handlePasswordReset}
     />
   </div>
 

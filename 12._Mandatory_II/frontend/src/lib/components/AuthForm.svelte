@@ -7,7 +7,7 @@
     includePassword = true,
     submitLabel = 'Submit',
     loading = false,
-    onsubmit = $bindable()
+    onsubmit = () => {}
   } = $props();
 
   function handleSubmit(event) {
